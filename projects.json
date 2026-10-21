@@ -1,0 +1,9 @@
+{
+  "owner": "guillearria",
+  "projects": [
+    {"name": "Global Observatory", "repo": "global-observatory", "site": "https://guillearria.github.io/global-observatory/"},
+    {"name": "Vertical Agent Solutions", "repo": "vertical-agent-solutions", "site": "https://vertical-agent-solutions.pages.dev"},
+    {"name": "Swing Lab", "repo": "swing-lab", "site": "https://guillearria.github.io/swing-lab/"},
+    {"name": "Phoenix", "repo": "phoenix", "site": null}
+  ]
+}
