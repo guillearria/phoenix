@@ -88,21 +88,24 @@ def row(day, project, kind, value, who="", url=""):
 
 
 def collect(owner, repo, today, get):
-    """Everything readable about one repo. `get(path, accept=None)` returns parsed JSON."""
+    """Everything readable about one repo. `get(path, accept=None)` returns parsed JSON.
+
+    Issues and comments are public and always read. The lists of who starred, forked or
+    watches may need a user token (READ_TOKEN); without one, GitHub's public totals stand in
+    and the counts may include the owner. Returns (rows, names_readable)."""
     base = f"/repos/{owner}/{repo}"
+
+    def optional(path, accept="application/vnd.github+json"):
+        try:
+            return get(path, accept=accept)
+        except urllib.error.URLError:
+            return None
+
+    info = get(base)
     items = get(f"{base}/issues?state=all&per_page=100")
     comments = get(f"{base}/issues/comments?per_page=100")
     reviews = get(f"{base}/pulls/comments?per_page=100")
-    try:
-        stars = [(s.get("user"), s["starred_at"][:10]) for s in
-                 get(f"{base}/stargazers?per_page=100", accept="application/vnd.github.star+json")]
-    except urllib.error.URLError:
-        # Star dates need a user token (READ_TOKEN). Who starred is public, so without the
-        # token a star is dated by the day this job first sees it: within a day, run daily.
-        stars = [(u, today) for u in get(f"{base}/stargazers?per_page=100")]
-    forks = get(f"{base}/forks?per_page=100")
-    watchers = get(f"{base}/subscribers?per_page=100")
-    rows = []
+    rows, names_readable = [], True
     for it in items:
         if is_person(it.get("user"), owner):
             kind = "pull_request" if "pull_request" in it else "issue"
@@ -111,21 +114,35 @@ def collect(owner, repo, today, get):
         for c in found:
             if is_person(c.get("user"), owner):
                 rows.append(row(c["created_at"][:10], repo, kind, 1, c["user"]["login"], c["html_url"]))
-    for user, day in stars:
+
+    dated = optional(f"{base}/stargazers?per_page=100", "application/vnd.github.star+json")
+    plain = None if dated is not None else optional(f"{base}/stargazers?per_page=100")
+    if dated is not None:
+        stars = [(s.get("user"), s["starred_at"][:10]) for s in dated]
+    elif plain is not None:
+        stars = [(u, today) for u in plain]  # dated by first sighting; the job runs daily
+    else:
+        stars = None
+    for user, day in stars or []:
         if is_person(user, owner):
             rows.append(row(day, repo, "star", 1, user["login"], user["html_url"]))
-    for f in forks:
+    forks = optional(f"{base}/forks?per_page=100")
+    for f in forks or []:
         if is_person(f.get("owner"), owner):
             rows.append(row(f["created_at"][:10], repo, "fork", 1, f["owner"]["login"], f["html_url"]))
+    watchers = optional(f"{base}/subscribers?per_page=100")
+
+    if stars is None or forks is None or watchers is None:
+        names_readable = False
     counts = {
-        "stars": sum(is_person(user, owner) for user, _ in stars),
-        "watching": sum(is_person(w, owner) for w in watchers),
-        "forks": sum(is_person(f.get("owner"), owner) for f in forks),
+        "stars": info["stargazers_count"] if stars is None else sum(is_person(u, owner) for u, _ in stars),
+        "watching": info["subscribers_count"] if watchers is None else sum(is_person(w, owner) for w in watchers),
+        "forks": info["forks_count"] if forks is None else sum(is_person(f.get("owner"), owner) for f in forks),
         "open_issues": sum(it.get("state") == "open" and "pull_request" not in it for it in items),
         "open_prs": sum(it.get("state") == "open" and "pull_request" in it for it in items),
     }
     rows += [row(today, repo, k, int(counts[k])) for k in DAILY]
-    return rows
+    return rows, names_readable
 
 
 def collect_visits(owner, repo, today, get):
@@ -171,7 +188,7 @@ def write_ledger(rows):
         w.writerows(rows)
 
 
-def render(rows, cfg, now, visits_counted):
+def render(rows, cfg, now, visits_counted, names_readable=True):
     owner, projects = cfg["owner"], cfg["projects"]
     name = {p["repo"]: p["name"] for p in projects}
     today = now.date()
@@ -194,6 +211,9 @@ def render(rows, cfg, now, visits_counted):
         recent = sum(1 for r in people if r["project"] == repo and r["date"] > week_ago)
         out.append(f"| [{p['name']}](https://github.com/{owner}/{repo}) | {val('stars')} | "
                    f"{val('watching')} | {val('forks')} | {val('open_issues')} | {val('open_prs')} | {recent} |")
+    if not names_readable:
+        out += ["", "Stars, watching and forks are GitHub's public totals and can include the owner. "
+                "Who starred, forked or watches needs a read token."]
     out += ["", "## Visits on GitHub, last 7 days", ""]
     visit_rows = [r for r in rows if r["kind"] in VISITS and r["date"] > week_ago]
     if not visits_counted and not visit_rows:
@@ -224,10 +244,12 @@ def main():
     today = now.date().isoformat()
     get = lambda path, accept="application/vnd.github+json": fetch(path, token, accept)
     get_traffic = lambda path, accept="application/vnd.github+json": fetch(path, traffic_token, accept)
-    new, problems, visits_counted = [], [], bool(traffic_token)
+    new, problems, visits_counted, names_readable = [], [], bool(traffic_token), True
     for p in cfg["projects"]:
         try:
-            new += collect(owner, p["repo"], today, get)
+            got, readable = collect(owner, p["repo"], today, get)
+            new += got
+            names_readable = names_readable and readable
         except (urllib.error.URLError, KeyError, ValueError) as e:
             problems.append(f"{p['repo']}: could not read GitHub ({e})")
         if traffic_token:
@@ -238,10 +260,11 @@ def main():
                 problems.append(f"{p['repo']}: could not read visits ({e})")
     rows = merge(read_ledger(), new)
     write_ledger(rows)
-    STATE.write_text(render(rows, cfg, now, visits_counted))
+    STATE.write_text(render(rows, cfg, now, visits_counted, names_readable))
     people = sum(1 for r in rows if r["kind"] in PEOPLE)
     print(f"listen: {len(new)} rows read, ledger {len(rows)} rows, {people} from people, "
-          f"visits {'counted' if visits_counted else 'not counted'}")
+          f"visits {'counted' if visits_counted else 'not counted'}, "
+          f"names {'read' if names_readable else 'not readable without READ_TOKEN'}")
     for msg in problems:
         print(f"PROBLEM: {msg}", file=sys.stderr)
     return 1 if problems else 0
