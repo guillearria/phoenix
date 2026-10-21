@@ -1,0 +1,112 @@
+{
+  "_about": "Which model does which job. Picks come from Arena's public leaderboards (arena.ai/leaderboard). Prices are OpenRouter's public list in US dollars per million tokens, input/output. Read 2026-10-20. Re-read monthly; prices change faster than rankings.",
+  "rules": [
+    "The checker comes from a different company than the builder.",
+    "When best and best_value are close, run both blind on real tasks for a week and keep the winner.",
+    "Agent work in a repo runs on Claude Code under the flat subscription; outside models are called through OpenRouter under a weekly dollar cap.",
+    "Night jobs use :batch variants where they exist.",
+    "OpenRouter privacy: zero data retention on; providers that train on data off.",
+    "Personal projects never send anything to any model through this system."
+  ],
+  "jobs": [
+    {
+      "job": "agent_build",
+      "plain": "Build or fix code inside a repo",
+      "best": {
+        "model": "claude-opus-5.5",
+        "via": "Claude Code (subscription)",
+        "arena": "Agent #1, median $6.18 per task"
+      },
+      "best_value": {
+        "model": "openai/gpt-6.1-sol",
+        "price": "2.00/10.00",
+        "arena": "Agent #4, median $0.77 per task"
+      }
+    },
+    {
+      "job": "web_ui",
+      "plain": "Web pages and interfaces",
+      "best": {
+        "model": "anthropic/claude-opus-5.5",
+        "price": "4.00/20.00",
+        "arena": "WebDev #1, 1807"
+      },
+      "best_value": {
+        "model": "anthropic/claude-sonnet-5.5",
+        "price": "2.00/10.00",
+        "arena": "WebDev #3, 1768"
+      },
+      "best_open": {
+        "model": "deepseek/deepseek-v4.1-flash-1017",
+        "price": "0.30/1.20",
+        "arena": "WebDev 1664, top open model"
+      }
+    },
+    {
+      "job": "text",
+      "plain": "Read, summarize, classify and write text",
+      "best": {
+        "model": "google/gemini-4-argon",
+        "price": "2.00/10.00",
+        "arena": "Text #1, 1524 (preliminary)"
+      },
+      "best_value": {
+        "model": "z-ai/glm-5.3-flash",
+        "price": "0.15/0.50",
+        "arena": "Text 1475; batch 0.05/0.18"
+      }
+    },
+    {
+      "job": "research",
+      "plain": "Search the web and report with sources",
+      "best": {
+        "model": "openai/gpt-5.6-sol",
+        "price": "4.00/20.00",
+        "arena": "Search #1, 1261"
+      },
+      "best_value": {
+        "model": "qwen/qwen3.8-max-0902",
+        "price": "2.00/6.00",
+        "arena": "Search #2, 1261 (tied)"
+      }
+    },
+    {
+      "job": "documents",
+      "plain": "Read long documents",
+      "best": {
+        "model": "anthropic/claude-opus-5",
+        "price": "5.00/25.00",
+        "arena": "Document #1, 1516; Claude holds the top seven"
+      }
+    },
+    {
+      "job": "images",
+      "plain": "Logos, illustrations, social cards",
+      "best": {
+        "model": "gpt-image-2.5",
+        "via": "OpenAI directly (not on OpenRouter)",
+        "arena": "Text-to-Image #1, 1425 (preliminary)"
+      }
+    },
+    {
+      "job": "second_opinion",
+      "plain": "Review a pull request another model wrote",
+      "best": {
+        "model": "openai/gpt-6.1-sol",
+        "price": "2.00/10.00",
+        "why": "Strong agent and search ranks, a different company from the builder, low cost"
+      },
+      "fallback": {
+        "model": "google/gemini-4-argon",
+        "price": "2.00/10.00"
+      }
+    }
+  ],
+  "watch": [
+    {
+      "name": "Arena Max router",
+      "what": "Arena's own router picks a model per task; #1 on the Agent board at about 37% lower cost than the top single model (Arena blog, 2026-10-12).",
+      "status": "API waitlist; not open"
+    }
+  ]
+}
