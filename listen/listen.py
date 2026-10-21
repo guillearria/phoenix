@@ -43,9 +43,13 @@ def fetch(path, token=None, accept="application/vnd.github+json"):
             "Accept": accept, "User-Agent": "phoenix-listen", "X-GitHub-Api-Version": "2022-11-28"})
         if token:
             req.add_header("Authorization", f"Bearer {token}")
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            body = json.loads(resp.read().decode("utf-8"))
-            link = resp.headers.get("Link") or ""
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                body = json.loads(resp.read().decode("utf-8"))
+                link = resp.headers.get("Link") or ""
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf-8", "replace")[:200]
+            raise urllib.error.URLError(f"{e.code} on {path}: {detail}") from e
         if not isinstance(body, list):
             return body
         out = (out or []) + body
