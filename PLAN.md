@@ -1,6 +1,6 @@
 # The plan
 
-Draft, 2026-10-20. Nothing here is built yet.
+Started 2026-10-20. Steps 1 and 2 are done; the rest is a plan.
 
 ## The idea
 
@@ -77,8 +77,8 @@ One message. What changed, what people did, what is waiting. The target is a 15-
 
 ## Steps
 
-1. **Ears.** A daily public ledger of visits, stars, issues and comments for every project. No AI.
-2. **Simple front pages.** Every project README fits on one screen.
+1. **Ears.** Done 2026-10-21. A daily job with no AI keeps [the ledger](ledger/signals.csv) and [STATE.md](STATE.md). Visits and the names of people who star need a read token.
+2. **Simple front pages.** Done 2026-10-21. Every project README fits on one screen.
 3. **Hands.** Anthropic's official GitHub Action in each project, so an agent can work an issue and open a pull request.
 4. **More models.** One OpenRouter key, a weekly cap, a cost ledger, and a second-opinion review on every pull request.
 5. **Brain.** One nightly run that reads the ledger and writes tonight's issues.
