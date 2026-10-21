@@ -81,7 +81,7 @@ One message. What changed, what people did, what is waiting. The target is a 15-
 2. **Simple front pages.** Done 2026-10-21. Every project README fits on one screen.
 3. **Hands.** Anthropic's official GitHub Action in each project, so an agent can work an issue and open a pull request.
 4. **More models.** One OpenRouter key, a weekly cap, a cost ledger, and a second-opinion review on every pull request.
-5. **Brain.** One nightly run that reads the ledger and writes tonight's issues.
+5. **Brain.** One nightly run that reads the ledger and writes tonight's issues. Written down in [brain/BRAIN.md](brain/BRAIN.md); it starts after the hands exist and the run cap is ruled.
 6. **New prototypes.** Find problems real people describe, in job posts and forums. Build small tests. Retire the ones nobody uses.
 
 ## Not decided yet
