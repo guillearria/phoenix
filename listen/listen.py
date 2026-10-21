@@ -9,8 +9,9 @@ Rules
 - "People" means anyone except the owner and bots.
 - A fact about a person (an issue, a comment, a star...) is written once, keyed by its link.
 - Daily counts get one row per project per day; a second run the same day replaces it.
-- Visits need TRAFFIC_TOKEN, a token that can read repository traffic. Without it they are
-  skipped and STATE.md says so.
+- READ_TOKEN, if set, is used for every read: a read-only token whose access includes
+  repository traffic. Without it the workflow's own token reads the public data and visits
+  are skipped; STATE.md says so.
 - If any read fails, the files are still written from what was read, then the script exits 1
   so the run shows red. A broken run is never silent.
 """
@@ -35,21 +36,35 @@ LABEL = {"issue": "an issue", "pull_request": "a pull request", "comment": "a co
 API = "https://api.github.com"
 
 
+def _get(url, token, accept):
+    req = urllib.request.Request(url, headers={
+        "Accept": accept, "User-Agent": "phoenix-listen", "X-GitHub-Api-Version": "2022-11-28"})
+    if token:
+        req.add_header("Authorization", f"Bearer {token}")
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8")), resp.headers.get("Link") or ""
+
+
 def fetch(path, token=None, accept="application/vnd.github+json"):
-    """GET a GitHub API path, following every page. Returns a dict or a list."""
+    """GET a GitHub API path, following every page. Returns a dict or a list.
+
+    The workflow's own token is refused on some lists of other repos (stargazers, for one)
+    with "Resource not accessible by integration". That data is public, so the same request
+    is retried once without a token."""
     url, out = API + path, None
     while url:
-        req = urllib.request.Request(url, headers={
-            "Accept": accept, "User-Agent": "phoenix-listen", "X-GitHub-Api-Version": "2022-11-28"})
-        if token:
-            req.add_header("Authorization", f"Bearer {token}")
         try:
-            with urllib.request.urlopen(req, timeout=30) as resp:
-                body = json.loads(resp.read().decode("utf-8"))
-                link = resp.headers.get("Link") or ""
+            try:
+                body, link = _get(url, token, accept)
+            except urllib.error.HTTPError as e:
+                detail = e.read().decode("utf-8", "replace")
+                if token and e.code == 403 and "not accessible by integration" in detail:
+                    body, link = _get(url, None, accept)
+                else:
+                    raise urllib.error.URLError(f"{e.code} on {path}: {detail[:200]}") from e
         except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", "replace")[:200]
-            raise urllib.error.URLError(f"{e.code} on {path}: {detail}") from e
+            raise urllib.error.URLError(f"{e.code} on {path} (asked without a token): "
+                                        f"{e.read().decode('utf-8', 'replace')[:200]}") from e
         if not isinstance(body, list):
             return body
         out = (out or []) + body
@@ -193,8 +208,8 @@ def render(rows, cfg, now, visits_counted):
 def main():
     cfg = json.loads((ROOT / "projects.json").read_text())
     owner = cfg["owner"]
-    token = os.environ.get("GITHUB_TOKEN") or None
-    traffic_token = os.environ.get("TRAFFIC_TOKEN") or None
+    traffic_token = os.environ.get("READ_TOKEN") or None
+    token = traffic_token or os.environ.get("GITHUB_TOKEN") or None
     now = datetime.now(timezone.utc)
     today = now.date().isoformat()
     get = lambda path, accept="application/vnd.github+json": fetch(path, token, accept)

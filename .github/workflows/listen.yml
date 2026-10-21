@@ -22,7 +22,7 @@ jobs:
       - name: Listen
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TRAFFIC_TOKEN: ${{ secrets.TRAFFIC_TOKEN }}
+          READ_TOKEN: ${{ secrets.READ_TOKEN }}
         run: python listen/listen.py
       - name: Commit
         if: always()
