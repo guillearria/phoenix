@@ -1,4 +1,5 @@
 import unittest
+import urllib.error
 from datetime import datetime, timezone
 
 import listen
@@ -67,6 +68,22 @@ class ListenTest(unittest.TestCase):
         cfg = {"owner": OWNER, "projects": [{"name": "Phoenix", "repo": "phoenix"}]}
         text = listen.render([], cfg, datetime(2026, 10, 21, tzinfo=timezone.utc), False)
         self.assertIn("Nobody yet.", text)
+
+
+class StarFallbackTest(unittest.TestCase):
+    def test_undated_stars_are_dated_when_first_seen_and_keep_that_date(self):
+        def get(path, accept=None):
+            if "/stargazers" in path:
+                if accept == "application/vnd.github.star+json":
+                    raise urllib.error.URLError("401 on stargazers: Requires authentication")
+                return [U("fan")]
+            return fake_get(path, accept)
+        day1 = listen.collect(OWNER, "swing-lab", "2026-10-21", get)
+        star = [r for r in day1 if r["kind"] == "star"]
+        self.assertEqual([(r["date"], r["who"]) for r in star], [("2026-10-21", "fan")])
+        day2 = listen.collect(OWNER, "swing-lab", "2026-10-22", get)
+        merged = listen.merge(listen.merge([], day1), day2)
+        self.assertEqual([r["date"] for r in merged if r["kind"] == "star"], ["2026-10-21"])
 
 
 if __name__ == "__main__":

@@ -7,7 +7,8 @@ Reads projects.json, asks GitHub's public API, and updates two files:
 
 Rules
 - "People" means anyone except the owner and bots.
-- A fact about a person (an issue, a comment, a star...) is written once, keyed by its link.
+- A fact about a person (an issue, a comment, a star...) is written once, keyed by its link,
+  and keeps the date it was first written with.
 - Daily counts get one row per project per day; a second run the same day replaces it.
 - READ_TOKEN, if set, is used for every read: a read-only token whose access includes
   repository traffic. Without it the workflow's own token reads the public data and visits
@@ -92,7 +93,13 @@ def collect(owner, repo, today, get):
     items = get(f"{base}/issues?state=all&per_page=100")
     comments = get(f"{base}/issues/comments?per_page=100")
     reviews = get(f"{base}/pulls/comments?per_page=100")
-    stars = get(f"{base}/stargazers?per_page=100", accept="application/vnd.github.star+json")
+    try:
+        stars = [(s.get("user"), s["starred_at"][:10]) for s in
+                 get(f"{base}/stargazers?per_page=100", accept="application/vnd.github.star+json")]
+    except urllib.error.URLError:
+        # Star dates need a user token (READ_TOKEN). Who starred is public, so without the
+        # token a star is dated by the day this job first sees it: within a day, run daily.
+        stars = [(u, today) for u in get(f"{base}/stargazers?per_page=100")]
     forks = get(f"{base}/forks?per_page=100")
     watchers = get(f"{base}/subscribers?per_page=100")
     rows = []
@@ -104,14 +111,14 @@ def collect(owner, repo, today, get):
         for c in found:
             if is_person(c.get("user"), owner):
                 rows.append(row(c["created_at"][:10], repo, kind, 1, c["user"]["login"], c["html_url"]))
-    for s in stars:
-        if is_person(s.get("user"), owner):
-            rows.append(row(s["starred_at"][:10], repo, "star", 1, s["user"]["login"], s["user"]["html_url"]))
+    for user, day in stars:
+        if is_person(user, owner):
+            rows.append(row(day, repo, "star", 1, user["login"], user["html_url"]))
     for f in forks:
         if is_person(f.get("owner"), owner):
             rows.append(row(f["created_at"][:10], repo, "fork", 1, f["owner"]["login"], f["html_url"]))
     counts = {
-        "stars": sum(is_person(s.get("user"), owner) for s in stars),
+        "stars": sum(is_person(user, owner) for user, _ in stars),
         "watching": sum(is_person(w, owner) for w in watchers),
         "forks": sum(is_person(f.get("owner"), owner) for f in forks),
         "open_issues": sum(it.get("state") == "open" and "pull_request" not in it for it in items),
@@ -140,8 +147,11 @@ def key(r):
 
 
 def merge(old, new):
+    """Counts and visits: the newest read wins. A fact about a person keeps its first row."""
     out = {key(r): r for r in old}
     for r in new:
+        if r["kind"] in PEOPLE and key(r) in out:
+            continue
         out[key(r)] = r
     return sorted(out.values(), key=lambda r: (r["date"], r["project"], r["kind"], r["url"], r["who"]))
 
