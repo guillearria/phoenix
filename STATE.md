@@ -1,6 +1,6 @@
 # State
 
-Updated 2026-10-21 04:08 UTC by the daily listen job. Every number comes from [the ledger](ledger/signals.csv). People means anyone except the owner and bots.
+Updated 2026-10-21 13:55 UTC by the daily listen job. Every number comes from [the ledger](ledger/signals.csv). People means anyone except the owner and bots.
 
 | Project | Stars | Watching | Forks | Open issues | Open pull requests | People activity, 7 days |
 |---|---:|---:|---:|---:|---:|---:|
