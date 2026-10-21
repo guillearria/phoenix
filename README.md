@@ -1,6 +1,6 @@
 # Phoenix
 
-Phoenix works every night on a set of public projects. It listens to what real people do, gives each job to the best-value AI model, and shows all of its work here.
+Phoenix will work every night on a set of public projects. It will listen to what real people do, give each job to the best-value AI model, and show all of its work here.
 
 **Status:** plan stage. Nothing runs yet. Read [the plan](PLAN.md).
 
