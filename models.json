@@ -14,7 +14,7 @@
       "plain": "Build or fix code inside a repo",
       "best": {
         "model": "claude-opus-5.5",
-        "via": "Claude Code (subscription)",
+        "via": "Claude Code on the flat subscription, no per-use price",
         "arena": "Agent #1, median $6.18 per task"
       },
       "best_value": {
@@ -84,7 +84,7 @@
       "plain": "Logos, illustrations, social cards",
       "best": {
         "model": "gpt-image-2.5",
-        "via": "OpenAI directly (not on OpenRouter)",
+        "via": "OpenAI directly, priced per image; not on OpenRouter",
         "arena": "Text-to-Image #1, 1425 (preliminary)"
       }
     },

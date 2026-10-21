@@ -24,12 +24,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           READ_TOKEN: ${{ secrets.READ_TOKEN }}
         run: python listen/listen.py
+      - name: Model prices
+        if: always()
+        run: python models/check.py
       - name: Commit
         if: always()
         run: |
           git config user.name "phoenix-listen"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ledger/signals.csv STATE.md
+          git add ledger/signals.csv STATE.md MODELS.md
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git commit -m "listen $(date -u +%F): ledger and STATE updated"
           git push

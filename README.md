@@ -24,6 +24,6 @@ Phoenix will work every night on a set of public projects. It will listen to wha
 
 - Everything Phoenix does is public: issues, pull requests, costs and results.
 - A stranger's issue is feedback. It becomes work only when a person or Phoenix labels it.
-- Each job goes to the model that does it best for the price. The table is [models.json](models.json).
+- Each job goes to the model that does it best for the price. The picks are in [models.json](models.json); today's prices are in [MODELS.md](MODELS.md).
 
 A personal project by [Guillermo Arria-Devoe](https://github.com/guillearria).
