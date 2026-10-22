@@ -1,4 +1,6 @@
 # Golf groups
+**You get:** new golf groups for every round, so everyone plays with as many different people as possible.
+**Status:** live
 
 **The problem.** Golf trips and leagues want new foursomes each round, so everyone plays with
 everyone and nobody gets the same partners again. Organizers ask for help on forums year after
