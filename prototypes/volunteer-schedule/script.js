@@ -1,8 +1,8 @@
-// Fair rota maker. Runs only in this browser; saves to localStorage.
+// Volunteer schedule maker. Runs only in this browser; saves to localStorage.
 (function () {
   "use strict";
 
-  var KEY = "fair-rota-v1";
+  var KEY = "volunteer-schedule-v1";
   var MAX_DATES = 100;
   var DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -165,7 +165,7 @@
     }
     var t = document.createElement("table");
     var cap = t.createCaption();
-    cap.textContent = "Rota";
+    cap.textContent = "Schedule";
     var h = t.createTHead().insertRow();
     ["Day", "Who"].forEach(function (x) {
       var th = document.createElement("th"); th.scope = "col"; th.textContent = x; h.appendChild(th);
@@ -291,12 +291,12 @@
     var blob = new Blob([asCsv(lastRota)], { type: "text/csv" });
     var a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "rota.csv";
+    a.download = "volunteer-schedule.csv";
     document.body.appendChild(a);
     a.click();
     a.remove();
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-    statusBox.textContent = "Saved rota.csv. It opens in Excel or any spreadsheet.";
+    statusBox.textContent = "Saved volunteer-schedule.csv. It opens in Excel or any spreadsheet.";
   });
   el("clear").addEventListener("click", function () {
     if (!window.confirm("Clear all names, days and away marks?")) return;

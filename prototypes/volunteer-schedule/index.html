@@ -3,17 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fair rota maker</title>
+<title>Volunteer schedule maker</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main>
-  <h1>Fair rota maker</h1>
-  <p class="lead">Make a volunteer rota that shares turns evenly and skips the days people can't come.
+  <h1>Volunteer schedule maker</h1>
+  <p class="lead">You get: a volunteer schedule where everyone takes fair turns and nobody is booked on a day they can't come.
     Everything stays in this browser. Nothing is sent anywhere.</p>
 
   <section aria-labelledby="h-people">
-    <h2 id="h-people">1. Who is on the rota</h2>
+    <h2 id="h-people">1. Who takes turns</h2>
     <label for="people">Names, one per line</label>
     <textarea id="people" rows="6" placeholder="Ana&#10;Ben&#10;Chris"></textarea>
   </section>
@@ -49,9 +49,9 @@
   </section>
 
   <section class="rota" aria-labelledby="h-rota">
-    <h2 id="h-rota">4. Your rota</h2>
+    <h2 id="h-rota">4. Your schedule</h2>
     <div class="buttons">
-      <button type="button" id="make">Make the rota</button>
+      <button type="button" id="make">Make the schedule</button>
       <button type="button" id="shuffle" class="secondary">Try another mix</button>
     </div>
     <div id="result" aria-live="polite"></div>
