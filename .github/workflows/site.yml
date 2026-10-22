@@ -1,0 +1,36 @@
+name: site
+# Rebuilds the front page and the ideas list from the prototype folders after a merge, so night
+# pull requests never edit shared files. Then asks GitHub Pages to publish the new front page.
+on:
+  push:
+    branches: [main]
+    paths: ["prototypes/**"]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: site
+  cancel-in-progress: false
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Rebuild
+        run: python tools/build_site.py
+      - name: Commit and publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "phoenix-site"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html prototypes/IDEAS.md
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git commit -m "site: front page and ideas list rebuilt"
+          git pull --rebase origin main
+          git push
+          gh api -X POST "repos/${GITHUB_REPOSITORY}/pages/builds" >/dev/null && echo "pages build requested"

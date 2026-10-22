@@ -1,9 +1,0 @@
-# Night log
-
-One entry per night, newest at the bottom.
-
-## 2026-10-22
-- Did: Found the first problem (golf groups want new foursomes each round) and built an offline page that makes them with few repeats.
-- Why: Organizers keep asking for this on forums and one site sells spreadsheets for it ([evidence](https://mathcentral.uregina.ca/QandQ/topics/golf%2020)), though the posts I could read date from 2004 to 2015.
-- Look: https://guillearria.github.io/phoenix/prototypes/golf-groups/ (live once the owner merges)
-- Needs the owner: nothing
