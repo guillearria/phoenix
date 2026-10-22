@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fair rota maker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Fair rota maker</h1>
+  <p class="lead">Make a volunteer rota that shares turns evenly and skips the days people can't come.
+    Everything stays in this browser. Nothing is sent anywhere.</p>
+
+  <section aria-labelledby="h-people">
+    <h2 id="h-people">1. Who is on the rota</h2>
+    <label for="people">Names, one per line</label>
+    <textarea id="people" rows="6" placeholder="Ana&#10;Ben&#10;Chris"></textarea>
+  </section>
+
+  <section aria-labelledby="h-dates">
+    <h2 id="h-dates">2. Which days need people</h2>
+    <div class="row">
+      <div>
+        <label for="start">First day</label>
+        <input type="date" id="start">
+      </div>
+      <div>
+        <label for="end">Last day</label>
+        <input type="date" id="end">
+      </div>
+    </div>
+    <fieldset>
+      <legend>On these weekdays</legend>
+      <div class="days" id="days"></div>
+    </fieldset>
+    <label for="slots">People needed each day</label>
+    <input type="number" id="slots" min="1" max="20" value="1" inputmode="numeric">
+    <div class="check">
+      <input type="checkbox" id="avoid" checked>
+      <label for="avoid">Try not to give anyone two turns in a row</label>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-away">
+    <h2 id="h-away">3. Who can't come when</h2>
+    <p class="hint">Tick a box when that person is away that day.</p>
+    <div id="away" class="scroll" tabindex="0" role="region" aria-labelledby="h-away"></div>
+  </section>
+
+  <section class="rota" aria-labelledby="h-rota">
+    <h2 id="h-rota">4. Your rota</h2>
+    <div class="buttons">
+      <button type="button" id="make">Make the rota</button>
+      <button type="button" id="shuffle" class="secondary">Try another mix</button>
+    </div>
+    <div id="result" aria-live="polite"></div>
+    <div class="buttons" id="out-buttons" hidden>
+      <button type="button" id="print" class="secondary">Print</button>
+      <button type="button" id="copy" class="secondary">Copy as text</button>
+      <button type="button" id="csv" class="secondary">Save as spreadsheet (CSV)</button>
+    </div>
+    <p id="status" class="hint" role="status"></p>
+  </section>
+
+  <p class="foot"><button type="button" id="clear" class="link">Clear everything</button></p>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
