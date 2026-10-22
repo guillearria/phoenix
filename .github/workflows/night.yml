@@ -1,0 +1,82 @@
+name: night
+# The night shift: one Claude run that picks one move (find a problem, or build or improve a
+# prototype), then a plain script checks the work, puts it on its own branch and opens a pull
+# request. Nothing goes live until the owner merges it. One comment on the "Morning report"
+# issue every run, success or not. Claude never sees a GitHub key: the checkout keeps none, and
+# the key is attached only after Claude has finished.
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: night
+  cancel-in-progress: false
+jobs:
+  night:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test
+        run: |
+          python -m unittest discover -s listen -p "test_*.py"
+          python -m unittest discover -s tools -p "test_*.py"
+      - name: Login token saved?
+        id: token
+        env:
+          T: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -n "$T" ]; then echo "ok=true" >> "$GITHUB_OUTPUT"; else echo "ok=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-node@v4
+        if: steps.token.outputs.ok == 'true'
+        with:
+          node-version: 22
+      - name: Install Claude Code
+        if: steps.token.outputs.ok == 'true'
+        run: npm install -g @anthropic-ai/claude-code@2.1.291
+      - name: Work
+        id: work
+        if: steps.token.outputs.ok == 'true'
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          unset ANTHROPIC_API_KEY
+          set +e
+          { echo "Today is $(date -u +%F)."; echo; cat brain/NIGHT.md; } | timeout 50m claude -p \
+            --output-format text \
+            --model claude-opus-5-5 --fallback-model claude-sonnet-5-5 \
+            --tools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch" \
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch" \
+            --strict-mcp-config > "$RUNNER_TEMP/night.txt" 2>&1
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+          tail -n 60 "$RUNNER_TEMP/night.txt"
+          exit 0
+      - name: Check, branch and pull request
+        if: steps.token.outputs.ok == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORT_PATH: ${{ runner.temp }}/report.md
+        run: |
+          git config user.name "phoenix-night"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          python tools/night_ship.py
+      - name: Morning report
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPORT_PATH: ${{ runner.temp }}/report.md
+          TOKEN_OK: ${{ steps.token.outputs.ok }}
+          WORK_EXIT: ${{ steps.work.outputs.exit }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: python tools/morning.py

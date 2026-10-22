@@ -2,7 +2,7 @@
 
 Phoenix will work every night on a set of public projects. It will listen to what real people do, give each job to the best-value AI model, and show all of its work here.
 
-**Status:** step 1 runs. A daily job records what people do in [STATE.md](STATE.md) and [the ledger](ledger/signals.csv). The rest is [the plan](PLAN.md).
+**Status:** a daily job records what people do in [STATE.md](STATE.md). Each night a night shift can find a problem or build a prototype, and opens a pull request. Nothing goes live until a person merges it. Prototypes: [guillearria.github.io/phoenix](https://guillearria.github.io/phoenix/). The rest is [the plan](PLAN.md).
 
 ## How a night works
 

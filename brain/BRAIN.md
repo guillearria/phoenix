@@ -1,6 +1,7 @@
 # Brain
 
-The nightly run that chooses Phoenix's work. **Not scheduled yet.** It waits for two things: the
+The night shift already runs inside Phoenix itself ([NIGHT.md](NIGHT.md)): one move a night, as a pull
+request. This page is the next step, choosing work across the other public projects. **Not scheduled yet.** It waits for two things: the
 hands (Anthropic's official GitHub Action in each project, so someone works what the brain
 writes) and a ruling on how many AI runs a week Phoenix may use. Choosing work that nobody does
 would only create noise.
