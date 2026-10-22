@@ -32,6 +32,10 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
 - Plain everyday American English. Use the words people would type into a search box:
   "schedule", "rotation", "split the bill", not niche or regional words.
 - index.html opens with the title, then one sentence starting "You get:" that names the result.
+- index.html ends with a short footer: "Did this help?" and a link that opens a new GitHub issue
+  on this repo with the prototype's name prefilled in the title. That link is the only way a
+  visitor can reach us; a plain link is fine, a form that sends data is not.
+- Everything is free, with nothing to sell and no soliciting, ever.
 - The first screen already shows a filled-in example and its result, so a visitor understands the
   tool in five seconds. A clear "Start fresh" button empties it.
 - A clean, calm look: system fonts, generous spacing, one accent color, large tap targets, works
