@@ -96,6 +96,18 @@ def site_index(prototypes_dir):
 """
 
 
+def prototype_names(paths):
+    """The prototype folders a night touched, e.g. prototypes/fair-rota/index.html -> fair-rota."""
+    return sorted({Path(p).parts[1] for p in paths
+                   if len(Path(p).parts) >= 3 and Path(p).parts[0] == "prototypes"})
+
+
+def preview_links(sha, names):
+    """Links that show a branch's pages before merging. The free preview service asks for one
+    extra click ("Open the page") and serves the files exactly as they are on GitHub."""
+    return [f"https://raw.githack.com/guillearria/phoenix/{sha}/prototypes/{n}/index.html" for n in names]
+
+
 def write_site():
     (ROOT / "index.html").write_text(site_index(ROOT / "prototypes"), encoding="utf-8")
     (ROOT / ".nojekyll").write_text("", encoding="utf-8")
@@ -137,6 +149,9 @@ def main():
             git("add", "-A")
             git("commit", "-m", f"night {day}: {did_line(entry)}")
             git("push", "-u", "origin", branch)
+        sha = git("rev-parse", "HEAD").strip()
+        previews = preview_links(sha, prototype_names(files))
+        preview_lines = [f"Preview before merging: {u}" for u in previews]
         if problems:
             body = [f"**Held.** Tonight's work failed the safety check, so there is nothing to merge. "
                     f"It stays on its branch for reference: {compare}"] + [f"- {p}" for p in problems]
@@ -144,8 +159,9 @@ def main():
         else:
             pr = None if dry else open_pull_request(
                 branch, f"Night {day}: {did_line(entry)}",
-                f"{entry}\n\nPassed the safety check. Merge to publish it; close to drop it.")
-            body = [f"**Ready for you.** Merge to publish, or close to drop it: {pr or compare}"]
+                "\n\n".join([entry] + preview_lines +
+                              ["Passed the safety check. Merge to publish it; close to drop it."]))
+            body = [f"**Ready for you.** Merge to publish, or close to drop it: {pr or compare}"] + preview_lines
             outcome = "ready"
     report = [f"Morning report, {day}.", ""] + body + [""]
     report += [entry if entry else "The night wrote no log entry."] + ["", people]

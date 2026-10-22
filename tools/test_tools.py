@@ -62,6 +62,15 @@ class ShipTest(unittest.TestCase):
             self.assertIn("None yet", night_ship.site_index(Path(d) / "empty"))
 
 
+class PreviewTest(unittest.TestCase):
+    def test_prototype_names_and_links(self):
+        files = ["prototypes/fair-rota/index.html", "prototypes/fair-rota/script.js",
+                 "prototypes/IDEAS.md", "brain/LOG.md", "prototypes/tip/README.md"]
+        self.assertEqual(night_ship.prototype_names(files), ["fair-rota", "tip"])
+        self.assertEqual(night_ship.preview_links("abc", ["tip"]),
+                         ["https://raw.githack.com/guillearria/phoenix/abc/prototypes/tip/index.html"])
+
+
 class MorningTest(unittest.TestCase):
     def test_no_token_says_how_to_fix(self):
         text = morning.compose({"TOKEN_OK": "false", "RUN_URL": "u"}, "")
