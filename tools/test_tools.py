@@ -5,6 +5,7 @@ from pathlib import Path
 import gate
 import morning
 import night_ship
+import build_site as phoenix_site
 
 
 class GateTest(unittest.TestCase):
@@ -19,10 +20,11 @@ class GateTest(unittest.TestCase):
         page = '<!doctype html><form><label for="n">Name</label><input id="n"></form><script src="https://cdnjs.cloudflare.com/x.js"></script>'
         self.assertEqual(self.check("prototypes/tip/index.html", page), [])
 
-    def test_only_prototypes_and_the_log(self):
-        self.assertTrue(self.check("README.md", "hi"))
-        self.assertTrue(self.check(".github/workflows/x.yml", "on: push"))
-        self.assertEqual(self.check("brain/LOG.md", "## 2026-10-22"), [])
+    def test_only_one_folder_and_the_nights_log(self):
+        self.assertEqual(self.check("brain/nights/2026-10-23-4.md", "# Night"), [])
+        for shared in ("README.md", ".github/workflows/x.yml", "prototypes/IDEAS.md",
+                       "index.html", "brain/LOG.md", "brain/NIGHT.md"):
+            self.assertTrue(self.check(shared, "x"), shared)
 
     def test_network_and_tracking_blocked(self):
         for code in ['fetch("/x")', "new XMLHttpRequest()", "navigator.sendBeacon(u)",
@@ -38,28 +40,47 @@ class GateTest(unittest.TestCase):
 
 
 class ShipTest(unittest.TestCase):
-    LOG = "# Night log\n\n## 2026-10-22\n- Did: Built a tip splitter.\n- Why: People asked ([source](https://x)).\n\n## 2026-10-23\n- Did: Next.\n"
+    LOG = "# Night 2026-10-23\n- Did: Built a tip splitter.\n- Why: People asked ([source](https://x)).\n"
 
-    def test_log_entry_and_did_line(self):
-        entry = night_ship.log_entry(self.LOG, "2026-10-22")
-        self.assertIn("tip splitter", entry)
-        self.assertNotIn("Next.", entry)
+    def test_log_lines_and_did_line(self):
+        entry = night_ship.log_lines(self.LOG)
+        self.assertTrue(entry.startswith("- Did:"))
+        self.assertNotIn("# Night", entry)
         self.assertEqual(night_ship.did_line(entry), "Built a tip splitter.")
-        self.assertEqual(night_ship.log_entry(self.LOG, "2026-10-30"), "")
+        self.assertEqual(night_ship.did_line(""), "night work")
 
     def test_people_total(self):
         state = "| [A](x) | 0 | 0 | 0 | 0 | 0 | 2 |\n| [B](y) | 1 | 0 | 0 | 0 | 0 | 3 |\n| Project | x |"
         self.assertEqual(night_ship.people_total(state), 5)
 
-    def test_site_index_lists_and_escapes(self):
+    def test_prototype_names_and_links(self):
+        files = ["prototypes/fair/index.html", "prototypes/fair/script.js",
+                 "brain/nights/2026-10-23-4.md", "prototypes/tip/README.md"]
+        self.assertEqual(night_ship.prototype_names(files), ["fair", "tip"])
+        self.assertEqual(night_ship.preview_links("abc", ["tip"]),
+                         ["https://raw.githack.com/guillearria/phoenix/abc/prototypes/tip/index.html"])
+
+
+class SiteTest(unittest.TestCase):
+    def test_cards_index_and_ideas(self):
         with tempfile.TemporaryDirectory() as d:
-            p = Path(d) / "tip"
-            p.mkdir()
-            (p / "README.md").write_text("# Split <tips> fairly\n")
-            page = night_ship.site_index(Path(d))
+            live = Path(d) / "tip"
+            live.mkdir()
+            (live / "README.md").write_text("# Split <the> bill\n**You get:** each share in one tap.\n**Status:** live\n")
+            (live / "index.html").write_text("<p>x</p>")
+            idea = Path(d) / "later"
+            idea.mkdir()
+            (idea / "README.md").write_text("# Later\n")
+            cards = phoenix_site.cards(Path(d))
+            self.assertEqual([(c["name"], c["status"], c["page"]) for c in cards],
+                             [("later", "idea", False), ("tip", "live", True)])
+            page = phoenix_site.index_html(cards)
             self.assertIn('href="prototypes/tip/"', page)
-            self.assertIn("Split &lt;tips&gt; fairly", page)
-            self.assertIn("None yet", night_ship.site_index(Path(d) / "empty"))
+            self.assertIn("Split &lt;the&gt; bill", page)
+            self.assertIn("each share in one tap.", page)
+            self.assertNotIn("prototypes/later/", page)
+            self.assertIn("[Later](later/README.md), idea", phoenix_site.ideas_md(cards))
+            self.assertIn("None yet", phoenix_site.index_html([]))
 
 
 class MorningTest(unittest.TestCase):
@@ -67,6 +88,11 @@ class MorningTest(unittest.TestCase):
         text = morning.compose({"TOKEN_OK": "false", "RUN_URL": "u"}, "")
         self.assertTrue(text.startswith("@guillearria "))
         self.assertIn("gh secret set CLAUDE_CODE_OAUTH_TOKEN", text)
+
+    def test_rested_lists_what_waits(self):
+        text = morning.compose({"SKIPPED": "true", "TOKEN_OK": "true", "WAITING_LIST": "- #2 A\n- #3 B"}, "")
+        self.assertIn("Rested.", text)
+        self.assertIn("#3 B", text)
 
     def test_report_and_early_stop(self):
         text = morning.compose({"TOKEN_OK": "true", "WORK_EXIT": "124"}, "Morning report.\n\n**Ready for you.**")
