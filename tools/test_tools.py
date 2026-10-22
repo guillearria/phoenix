@@ -61,6 +61,23 @@ class ShipTest(unittest.TestCase):
                          ["https://raw.githack.com/guillearria/phoenix/abc/prototypes/tip/index.html"])
 
 
+class OutreachTest(unittest.TestCase):
+    def test_outreach_text_reads_only_existing_files(self):
+        with tempfile.TemporaryDirectory() as d:
+            old = night_ship.ROOT
+            night_ship.ROOT = Path(d)
+            try:
+                (Path(d) / "prototypes" / "tip").mkdir(parents=True)
+                (Path(d) / "prototypes" / "tip" / "outreach.md").write_text("- https://x\n  Try it.\n")
+                text = night_ship.outreach_text(["tip", "none"])
+                self.assertIn("Where to tell people (tip)", text)
+                self.assertIn("Try it.", text)
+                self.assertNotIn("none", text)
+                self.assertEqual(night_ship.outreach_text(["none"]), "")
+            finally:
+                night_ship.ROOT = old
+
+
 class SiteTest(unittest.TestCase):
     def test_cards_index_and_ideas(self):
         with tempfile.TemporaryDirectory() as d:

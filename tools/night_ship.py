@@ -67,6 +67,16 @@ def preview_links(sha, names):
     return [f"https://raw.githack.com/guillearria/phoenix/{sha}/prototypes/{n}/index.html" for n in names]
 
 
+def outreach_text(names):
+    """The night's paste-ready posts, from prototypes/<name>/outreach.md, for the report and PR."""
+    parts = []
+    for n in names:
+        f = ROOT / "prototypes" / n / "outreach.md"
+        if f.exists():
+            parts.append(f"## Where to tell people ({n})\n\n" + f.read_text(encoding="utf-8").strip())
+    return "\n\n".join(parts)
+
+
 def open_pull_request(branch, title, body):
     repo, token = os.environ.get("GITHUB_REPOSITORY"), os.environ.get("GITHUB_TOKEN")
     if not (repo and token):
@@ -105,7 +115,9 @@ def main():
             git("commit", "-m", f"night {day}: {did_line(entry)}")
             git("push", "-u", "origin", branch)
         sha = git("rev-parse", "HEAD").strip()
-        preview_lines = [f"Preview before merging: {u}" for u in preview_links(sha, prototype_names(files))]
+        names = prototype_names(files)
+        preview_lines = [f"Preview before merging: {u}" for u in preview_links(sha, names)]
+        outreach = outreach_text(names)
         if problems:
             body = [f"**Held.** Tonight's work failed the safety check, so there is nothing to merge. "
                     f"It stays on its branch for reference: {compare}"] + [f"- {p}" for p in problems]
@@ -114,8 +126,10 @@ def main():
             pr = None if dry else open_pull_request(
                 branch, f"Night {day}: {did_line(entry)}",
                 "\n\n".join([entry] + preview_lines +
-                            ["Passed the safety check. Merge to publish it; close to drop it."]))
-            body = [f"**Ready for you.** Merge to publish, or close to drop it: {pr or compare}"] + preview_lines
+                            ["Passed the safety check. Merge to publish it; close to drop it."]
+                            + ([outreach] if outreach else [])))
+            body = ([f"**Ready for you.** Merge to publish, or close to drop it: {pr or compare}"]
+                    + preview_lines + ([""] + [outreach] if outreach else []))
             outcome = "ready"
     report = [f"Morning report, {day}.", ""] + body + [""]
     report += [entry if entry else "The night wrote no log."] + ["", people]
