@@ -41,10 +41,15 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
 - README.md fits on one screen, in this shape:
 
       # <Title that names the result>
+
       **You get:** <one sentence>
+
       **The problem:** <two or three sentences, quoting people in under 15 words, with links>
+
       **What is missing:** <a few bullets>
+
       **Pass mark:** <a number of people helped> by <a date about 30 days out>
+
       **Status:** live
 
 ## Rules
