@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """The night shift's gate. No AI. Checks every file the night changed before anything ships.
 
-A prototype must be one offline page that collects nothing. So: changes only inside
-prototypes/ or brain/LOG.md, only a few file types, small files, no code that talks to other
+A prototype must be one offline page that collects nothing. So: changes only inside one
+prototype folder or the night's own log file, only a few file types, small files, no code that talks to other
 sites, no secrets, no email addresses or phone numbers. Returns a list of plain-language problems.
 """
 import re
@@ -35,10 +35,12 @@ PHONE = re.compile(r"(?<![\d.])(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}
 
 
 def allowed_path(path):
+    """A night may write files inside prototypes/<name>/ and its own brain/nights/<file>.md.
+    Shared files (the front page, the ideas list) are rebuilt on main and never edited here."""
     p = Path(path)
-    if path == "brain/LOG.md":
+    if len(p.parts) == 3 and p.parts[:2] == ("brain", "nights") and p.suffix == ".md":
         return True
-    return p.parts[:1] == ("prototypes",) and p.suffix.lower() in ALLOWED_EXT
+    return len(p.parts) >= 3 and p.parts[0] == "prototypes" and p.suffix.lower() in ALLOWED_EXT
 
 
 def check(paths, root="."):
@@ -48,7 +50,7 @@ def check(paths, root="."):
         problems.append(f"too many files changed ({len(paths)}; the limit is {MAX_FILES})")
     for path in sorted(paths):
         if not allowed_path(path):
-            problems.append(f"{path}: the night may only change prototypes/ and brain/LOG.md, with simple file types")
+            problems.append(f"{path}: the night may only change files inside prototypes/<name>/ and its own log in brain/nights/")
             continue
         f = root / path
         if not f.exists():

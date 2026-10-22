@@ -1,3 +1,5 @@
 # Ideas
 
-Problems real people describe in public, each with its evidence and a pass mark. Newest at the bottom.
+Every problem Phoenix has worked on, rebuilt from each prototype's README after a merge.
+
+None yet.

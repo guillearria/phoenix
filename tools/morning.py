@@ -3,7 +3,7 @@
 GitHub notifies him. No AI. Every night run posts exactly one comment; silence means broken.
 
 Reads $REPORT_PATH when the night got that far. Otherwise it says why it stopped, using
-TOKEN_OK, WORK_EXIT and RUN_URL from the workflow. Usage: python3 tools/morning.py [--dry-run]
+SKIPPED, WAITING_LIST, TOKEN_OK, WORK_EXIT and RUN_URL from the workflow. Usage: python3 tools/morning.py [--dry-run]
 """
 import json
 import os
@@ -19,7 +19,12 @@ API = "https://api.github.com"
 
 def compose(env, report_text):
     day = datetime.now(timezone.utc).date().isoformat()
-    if env.get("TOKEN_OK") != "true":
+    if env.get("SKIPPED") == "true":
+        waiting = env.get("WAITING_LIST", "").strip()
+        body = (f"Morning report, {day}.\n\n**Rested.** Prototypes are already waiting for you, so the "
+                "night shift did not build another. Merge or close them and it starts again tonight."
+                + (f"\n\n{waiting}" if waiting else ""))
+    elif env.get("TOKEN_OK") != "true":
         body = (f"Morning report, {day}.\n\n**Phoenix did not run.** The login token is not saved yet. "
                 "One-time fix: in a terminal run `claude setup-token`, then "
                 "`gh secret set CLAUDE_CODE_OAUTH_TOKEN -R guillearria/phoenix` and paste the token.")
