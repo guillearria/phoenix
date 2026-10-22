@@ -51,6 +51,9 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
           unset ANTHROPIC_API_KEY
+          # A token copied from a wrapped terminal carries line breaks and spaces; drop them.
+          CLAUDE_CODE_OAUTH_TOKEN="$(printf '%s' "$CLAUDE_CODE_OAUTH_TOKEN" | tr -d '[:space:]')"
+          export CLAUDE_CODE_OAUTH_TOKEN
           set +e
           { echo "Today is $(date -u +%F)."; echo; cat brain/NIGHT.md; } | timeout 50m claude -p \
             --output-format text \
