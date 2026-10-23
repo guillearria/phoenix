@@ -228,12 +228,14 @@ function save() {
   } catch (e) { /* storage off: fine */ }
 }
 
+// True when this browser has a saved list, even an empty one, so a cleared page stays cleared.
 function load() {
   try {
     const d = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (!d) return;
+    if (!d) return false;
     for (const k of ["names", "count", "size", "rounds"]) if (d[k] != null) $(k).value = d[k];
-  } catch (e) { /* ignore */ }
+    return true;
+  } catch (e) { return false; }
 }
 
 function run(quiet) {
@@ -272,16 +274,17 @@ $("copy").addEventListener("click", async () => {
   }
 });
 $("clear").addEventListener("click", () => {
-  try { localStorage.removeItem(KEY); } catch (e) { /* ignore */ }
   $("names").value = "";
   $("out").hidden = true;
+  $("example-note").hidden = true;
+  last = null;
+  save();
   updateMath();
 });
 for (const id of ["names", "size", "rounds"]) $(id).addEventListener("input", () => { updateMath(); save(); });
 $("math").tabIndex = -1;
 
-load();
-const firstVisit = !$("names").value.trim();
+const firstVisit = !load();
 if (firstVisit) $("fill").click();
 updateMath();
 if (firstVisit) {

@@ -49,6 +49,10 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
 - Test it before you finish: try the inputs a real user would change (a different size, an
   odd count, an empty field) and check the result matches what the page promises. A setting
   the page shows must do what it says.
+- Page text speaks only to the visitor. Comparisons with other tools, evidence and plans go in
+  README.md, never on the page. A visitor-facing invitation is fine, for example "Need X? Tell us."
+- A clear or start-fresh button must leave the page empty, and it must stay empty after a reload.
+  Test it.
 - A clean, calm look: system fonts, generous spacing, one accent color, large tap targets, works
   on a phone and in dark mode, readable contrast, real labels on every input, works with a keyboard.
 - No requests to other sites, no forms that send anything, no tracking, no accounts. Data stays in

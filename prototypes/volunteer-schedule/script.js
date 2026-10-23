@@ -310,19 +310,29 @@
   });
   el("clear").addEventListener("click", function () {
     if (!window.confirm("Clear all names, days and away marks?")) return;
-    try { localStorage.removeItem(KEY); } catch (e) { /* nothing saved */ }
-    location.reload();
+    var today = new Date();
+    var t0 = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    startBox.value = iso(t0);
+    endBox.value = iso(new Date(t0.getTime() + 12 * 7 * 864e5));
+    daysBox.querySelectorAll("input").forEach(function (c) { c.checked = c.value === "0"; });
+    slotsBox.value = 1;
+    avoidBox.checked = true;
+    seed = 1;
+    startFresh();
   });
 
+  // Empties the page and saves the empty state, so a reload never brings the example back.
   function startFresh() {
-    try { localStorage.removeItem(KEY); } catch (e) { /* nothing saved */ }
     peopleBox.value = "";
     away = {};
     isExample = false;
     el("example-note").hidden = true;
     resultBox.textContent = "";
+    statusBox.textContent = "";
     outButtons.hidden = true;
+    lastRota = null;
     drawAway();
+    save();
     peopleBox.focus();
   }
   el("fresh").addEventListener("click", startFresh);
