@@ -41,8 +41,8 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
   "schedule", "rotation", "split the bill", not niche or regional words.
 - index.html opens with the title, then one sentence starting "You get:" that names the result.
 - index.html ends with one footer line and one link that opens a new GitHub issue on this repo,
-  prefilled with the prototype's name: "Tell us what worked, or what you need next: <two or three
-  likely next features>." Then a trust line: free, nothing sent or stored, source code link.
+  prefilled with the prototype's name: "Tell us what worked, or what you need next". Nothing
+  more on that line. Then a trust line: free, nothing sent or stored, source code link.
 - Everything is free, with nothing to sell and no soliciting, ever.
 - The first screen already shows a filled-in example and its result, so a visitor understands the
   tool in five seconds. A clear "Start fresh" button empties it.
