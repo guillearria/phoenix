@@ -43,6 +43,7 @@ thead th { background: #f0f0ea; white-space: nowrap; }
 #away td { text-align: center; }
 #away th[scope="row"] { position: sticky; left: 0; background: #fff; white-space: nowrap; }
 .buttons { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0; }
+.buttons[hidden] { display: none; }
 button {
   font: inherit;
   padding: 0.55rem 1rem;
