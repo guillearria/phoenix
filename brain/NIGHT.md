@@ -45,6 +45,9 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
 - Everything is free, with nothing to sell and no soliciting, ever.
 - The first screen already shows a filled-in example and its result, so a visitor understands the
   tool in five seconds. A clear "Start fresh" button empties it.
+- Test it before you finish: try the inputs a real user would change (a different size, an
+  odd count, an empty field) and check the result matches what the page promises. A setting
+  the page shows must do what it says.
 - A clean, calm look: system fonts, generous spacing, one accent color, large tap targets, works
   on a phone and in dark mode, readable contrast, real labels on every input, works with a keyboard.
 - No requests to other sites, no forms that send anything, no tracking, no accounts. Data stays in
