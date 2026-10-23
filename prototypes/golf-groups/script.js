@@ -4,14 +4,20 @@ const $ = (id) => document.getElementById(id);
 const KEY = "golf-groups-v1";
 let last = null;
 
-// Split n players into groups no bigger than size, as even as possible.
-// 10 players in fours gives 4, 3, 3.
+// Groups of exactly the size you chose, with only the last group smaller.
+// 18 players in fives gives 5, 5, 5, 3. A leftover of one player is never a group of one:
+// 16 in fives gives 5, 5, 3, 3.
 function groupSizes(n, size) {
-  const g = Math.ceil(n / size);
-  const base = Math.floor(n / g);
-  const extra = n % g;
-  const sizes = [];
-  for (let i = 0; i < g; i++) sizes.push(i < extra ? base + 1 : base);
+  const full = Math.floor(n / size), rest = n % size;
+  const sizes = Array(full).fill(size);
+  if (rest === 1 && full > 0 && size === 2) {
+    sizes[sizes.length - 1] = 3;
+  } else if (rest === 1 && full > 0) {
+    sizes.pop();
+    sizes.push(Math.ceil((size + 1) / 2), Math.floor((size + 1) / 2));
+  } else if (rest > 0) {
+    sizes.push(rest);
+  }
   return sizes;
 }
 

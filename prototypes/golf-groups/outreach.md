@@ -14,7 +14,7 @@ Paste these yourself. Each needs an account on that site.
 
 - r/golf on Reddit, as a short post:
 
-  Made a free page for golf trips and leagues that rotates foursomes so everyone plays with everyone. No sign-up, nothing stored. https://guillearria.github.io/phoenix/prototypes/golf-groups/ Tell me what breaks for your group.
+  Made a free page for golf trips and leagues that makes new groups of any size each round so everyone plays with everyone. No sign-up, nothing stored. https://guillearria.github.io/phoenix/prototypes/golf-groups/ Tell me what breaks for your group.
 
 ## One line for LinkedIn
 

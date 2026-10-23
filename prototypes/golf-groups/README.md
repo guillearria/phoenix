@@ -5,7 +5,7 @@
 **Status:** live
 
 
-**The problem.** Golf trips and leagues want new foursomes each round, so everyone plays with
+**The problem.** Golf trips and leagues want new groups each round, so everyone plays with
 everyone and nobody gets the same partners again. Organizers ask for help on forums year after
 year ([Math Central](https://mathcentral.uregina.ca/QandQ/topics/golf%2020),
 [The Sand Trap](https://thesandtrap.com/forums/topic/64321-golf-pairings-software)).
