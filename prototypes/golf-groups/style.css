@@ -56,3 +56,10 @@ summary { cursor: pointer; font-weight: 600; }
   section[aria-labelledby="setup"], .actions, .foot, #copied, details { display: none; }
   .groups li { break-inside: avoid; }
 }
+.example { background: #fff7e6; border: 1px solid #f0c36d; border-radius: 8px; padding: 0.6rem 0.8rem; }
+.example[hidden] { display: none; }
+.about p { margin: 0.5rem 0; }
+.feedback { text-align: center; margin: 1.5rem 0 1rem; }
+.feedback p { margin: 0.3rem 0; }
+.trust { color: #4a4a4a; font-size: 0.95rem; }
+@media print { .example, .feedback, .about { display: none; } }

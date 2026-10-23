@@ -16,6 +16,7 @@
   var away = {};
   var seed = 1;
   var lastRota = null;
+  var isExample = false;
 
   // ---- dates ----
   function iso(d) { return d.toISOString().slice(0, 10); }
@@ -258,11 +259,20 @@
     seed = s.seed || 1;
     (s.days || []).forEach(function (i) { var c = el("day-" + i); if (c) c.checked = true; });
   } else {
+    // First visit: a filled-in example, so the result is visible before anyone types.
     var today = new Date();
     var t0 = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
     startBox.value = iso(t0);
-    endBox.value = iso(new Date(t0.getTime() + 12 * 7 * 864e5));
+    endBox.value = iso(new Date(t0.getTime() + 8 * 7 * 864e5));
     el("day-0").checked = true;
+    peopleBox.value = "Ana\nBen\nChris\nDee\nEli";
+    slotsBox.value = 2;
+    var sundays = dates();
+    away = {};
+    if (sundays[1]) away.Ana = {}, away.Ana[sundays[1]] = true;
+    if (sundays[2]) away.Dee = {}, away.Dee[sundays[2]] = true;
+    if (sundays[4]) away.Ben = {}, away.Ben[sundays[4]] = true;
+    isExample = true;
   }
 
   [peopleBox, startBox, endBox].forEach(function (x) { x.addEventListener("change", refresh); });
@@ -304,5 +314,22 @@
     location.reload();
   });
 
+  function startFresh() {
+    try { localStorage.removeItem(KEY); } catch (e) { /* nothing saved */ }
+    peopleBox.value = "";
+    away = {};
+    isExample = false;
+    el("example-note").hidden = true;
+    resultBox.textContent = "";
+    outButtons.hidden = true;
+    drawAway();
+    peopleBox.focus();
+  }
+  el("fresh").addEventListener("click", startFresh);
+  [peopleBox, startBox, endBox, slotsBox].forEach(function (x) {
+    x.addEventListener("input", function () { if (isExample) { isExample = false; el("example-note").hidden = true; } });
+  });
+
   drawAway();
+  if (isExample) { show(make()); } else { el("example-note").hidden = true; }
 })();

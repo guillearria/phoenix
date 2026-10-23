@@ -18,8 +18,9 @@ prototypes/.
 
 - **Novel and unmet, or skip it.** Before building, search for existing tools. If a well-made free
   tool already solves it, drop the idea and say so in your log. We serve needs people cannot
-  satisfy elsewhere. The README names the closest existing tools and what this does that they
-  do not.
+  satisfy elsewhere. The README names the closest existing tools and says, in one line, why the
+  people who asked are better off with this page. If you cannot write that line honestly, skip
+  the idea. Read the source threads to the end: a later reply often names a competitor.
 - The prototype may show one slice of the idea. The README can describe the whole picture in
   plain words, with the slice as the working example.
 

@@ -17,6 +17,11 @@ number of rounds. It makes groups for every round with as few repeats as it can 
 any repeat, and lists who played with whom. Copy or print the result. It works offline and
 keeps your list only in your browser.
 
+**What already exists.** golfsoftware.com has a free online pairings generator (numbers, group
+size, rounds, a who-played-with-whom view); spreadsheets sell for $12 to $45. **Why an asker is
+better off here:** real names, any group size with an honest leftover group, repeats marked, copy
+and print, and it works offline on a phone at the first tee.
+
 **What is fake or missing.**
 - It searches for a good mix. It does not prove a perfect mix exists or always find one.
 - No "keep these two apart", no fixed partners, no handicap balance, no tee times.

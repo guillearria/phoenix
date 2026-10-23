@@ -24,6 +24,16 @@ ask for help with this on Excel forums:
 
 It works offline. It saves to your own browser only. It sends nothing.
 
+## What already exists
+
+- [RotaCentral](https://www.rotacentral.com) and similar services: volunteer log-ins, reminders by
+  email and text, shift swaps, a fairness rule. Paid, with accounts and setup. A reply in the
+  Microsoft thread recommends it.
+- Spreadsheet templates: free, built and rebuilt by hand.
+
+**Why an asker is better off here:** they get a fair schedule in a minute with nothing to sign up
+for and nothing stored anywhere. In the UK a schedule like this is called a rota; the page says so.
+
 ## What is fake or missing
 
 - No roles yet (for example, "reader" and "welcomer" on the same day).

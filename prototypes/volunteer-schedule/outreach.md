@@ -6,7 +6,7 @@ Paste these yourself. Each needs an account on that site.
 
 - https://techcommunity.microsoft.com/discussions/excelgeneral/how-to-set-up-volunteer-rota/183931 (accepts replies)
 
-  If anyone still needs this: I made a free page that builds a volunteer schedule. You type the names, tick the days each person is away, and it shares the turns evenly. It runs in your browser and saves nothing anywhere. https://guillearria.github.io/phoenix/prototypes/volunteer-schedule/ What would you change?
+  If RotaCentral is more than your group needs: I made a free page that builds a volunteer rota. You type the names, tick the days each person is away, and it shares the turns evenly. No sign-up, and it saves nothing anywhere. https://guillearria.github.io/phoenix/prototypes/volunteer-schedule/ What would you change?
 
 - https://chandoo.org/forum/threads/allocate-duties-by-availability-and-role.45964/ (accepts replies)
 

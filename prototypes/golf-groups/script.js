@@ -236,7 +236,7 @@ function load() {
   } catch (e) { /* ignore */ }
 }
 
-function run() {
+function run(quiet) {
   const names = readNames();
   const size = num("size", 2, 12), rounds = num("rounds", 1, 60);
   if (names.length < 2 || size >= names.length) {
@@ -249,7 +249,7 @@ function run() {
   $("copied").textContent = "";
   last = { names, result: makeSchedule(names.length, size, rounds) };
   render(names, last.result);
-  $("result").scrollIntoView({ behavior: "smooth" });
+  if (!quiet) $("result").scrollIntoView({ behavior: "smooth" });
 }
 
 $("fill").addEventListener("click", () => {
@@ -258,8 +258,8 @@ $("fill").addEventListener("click", () => {
   updateMath();
   save();
 });
-$("make").addEventListener("click", run);
-$("again").addEventListener("click", run);
+$("make").addEventListener("click", () => run(false));
+$("again").addEventListener("click", () => run(false));
 $("print").addEventListener("click", () => window.print());
 $("copy").addEventListener("click", async () => {
   if (!last) return;
@@ -281,5 +281,14 @@ for (const id of ["names", "size", "rounds"]) $(id).addEventListener("input", ()
 $("math").tabIndex = -1;
 
 load();
-if (!$("names").value.trim()) $("fill").click();
+const firstVisit = !$("names").value.trim();
+if (firstVisit) $("fill").click();
 updateMath();
+if (firstVisit) {
+  run(true);  // the example result is visible before anyone types
+} else {
+  $("example-note").hidden = true;
+}
+for (const id of ["names", "size", "rounds", "count"]) {
+  $(id).addEventListener("input", () => { $("example-note").hidden = true; }, { once: true });
+}

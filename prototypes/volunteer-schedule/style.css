@@ -61,9 +61,16 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .scroll:focus
 .warn { color: #9a3412; font-weight: 600; }
 .short td { background: #fff4e5; }
 .foot { text-align: center; }
+.example { background: #fff7e6; border: 1px solid #f0c36d; border-radius: 8px; padding: 0.6rem 0.8rem; }
+.example[hidden] { display: none; }
+.about p { margin: 0.5rem 0; }
+.feedback { text-align: center; margin: 1.5rem 0 1rem; }
+.feedback p { margin: 0.3rem 0; }
+.trust { color: #4a4a4a; font-size: 0.95rem; }
+.feedback a { color: #1d4ed8; }
 @media print {
   body { background: #fff; }
-  section, .lead, .foot, h1 { display: none; }
+  section, .lead, .foot, h1, .example, .feedback, .hint { display: none; }
   section.rota { display: block; border: 0; padding: 0; }
   .buttons, .hint, #h-rota { display: none; }
 }

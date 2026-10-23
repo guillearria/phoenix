@@ -10,7 +10,10 @@
 <main>
   <h1>Volunteer schedule maker</h1>
   <p class="lead">You get: a volunteer schedule where everyone takes fair turns and nobody is booked on a day they can't come.
-    Everything stays in this browser. Nothing is sent anywhere.</p>
+    Free, no sign-up, and your names never leave this browser.</p>
+  <p class="hint">In the UK this is called a <strong>rota</strong>: the list of who is on duty when.</p>
+  <p class="example" id="example-note">This is a filled-in example: five volunteers, two needed every Sunday, a few away days.
+    Scroll down to see the schedule it made, or <button type="button" id="fresh" class="link">start fresh with your own names</button>.</p>
 
   <section aria-labelledby="h-people">
     <h2 id="h-people">1. Who takes turns</h2>
@@ -64,8 +67,25 @@
   </section>
 
   <p class="foot"><button type="button" id="clear" class="link">Clear everything</button></p>
+
+  <section class="about" aria-labelledby="h-about">
+    <h2 id="h-about">What this is, and what comes next</h2>
+    <p>Small groups run on volunteers: a church, a club, a weekend on-call list. Someone builds the
+      schedule by hand around who can't come. This page does that part in a minute.</p>
+    <p><strong>Already out there:</strong> RotaCentral and similar services do much more, with volunteer
+      log-ins, reminders and shift swaps, for a fee and a setup. Spreadsheet templates do it by hand.
+      This page is for a group that needs a fair schedule today, with nothing to sign up for.</p>
+    <p><strong>Next, if people ask:</strong> roles on the same day (reader, welcomer), a limit per person
+      ("at most twice a month"), a link volunteers can open to mark their own away days.</p>
+  </section>
+
+  <footer class="feedback">
+    <p>Did this help? <a href="https://github.com/guillearria/phoenix/issues/new?title=Volunteer+schedule+maker%3A+feedback&body=What+did+you+try%2C+and+what+happened%3F%0A%0A">Tell us in one line</a>. It stays free.</p>
+    <p class="trust">Free. Nothing is sent or stored outside your browser.
+      <a href="https://github.com/guillearria/phoenix/tree/main/prototypes/volunteer-schedule">Source code</a> ·
+      a <a href="https://guillearria.github.io/phoenix/">Phoenix</a> prototype.</p>
+  </footer>
 </main>
 <script src="script.js"></script>
-  <footer class="feedback"><p>Did this help? <a href="https://github.com/guillearria/phoenix/issues/new?title=Volunteer+schedule+maker%3A+feedback&body=What+did+you+try%2C+and+what+happened%3F%0A%0A">Tell us in one line</a> (free, no account needed beyond GitHub). It stays free.</p></footer>
 </body>
 </html>
