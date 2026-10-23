@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<title>Daylight saving time schedule: shift your day a little at a time</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Daylight saving time schedule</h1>
+  <p class="lead">You get: a day-by-day plan that moves your own wake-up, meal, nap and bedtimes a few minutes
+    at a time, so the clock change is no shock.
+    For a baby, a toddler, a dog's meals or your own alarm. Free, no sign-up, and your times never leave this browser.</p>
+  <p class="example" id="example-note">This is a filled-in example: a toddler's day, the next US clock change
+    (<span id="example-when">Sunday, November 1, 2026</span>), 15 minutes a day. The plan is below.
+    Change any time and the plan follows.</p>
+
+  <section aria-labelledby="h-day">
+    <h2 id="h-day">1. Your usual day</h2>
+    <div id="items"></div>
+    <button type="button" id="add" class="secondary">Add a time</button>
+  </section>
+
+  <section aria-labelledby="h-change">
+    <h2 id="h-change">2. The clock change</h2>
+    <fieldset>
+      <legend>Which way</legend>
+      <label class="choice"><input type="radio" name="dir" value="back" checked> Clocks go back an hour (fall)</label>
+      <label class="choice"><input type="radio" name="dir" value="forward"> Clocks go forward an hour (spring)</label>
+    </fieldset>
+    <label for="date">Date the clocks change</label>
+    <input id="date" type="date">
+    <p class="hint" id="next"></p>
+    <div class="row">
+      <button type="button" id="use-us" class="secondary">Use the US and Canada date</button>
+      <button type="button" id="use-eu" class="secondary">Use the UK and Europe date</button>
+    </div>
+
+    <h2>3. How to shift</h2>
+    <label for="step">How fast</label>
+    <select id="step">
+      <option value="10">10 minutes a day (6 days)</option>
+      <option value="15" selected>15 minutes a day (4 days)</option>
+      <option value="20">20 minutes a day (3 days)</option>
+      <option value="30">30 minutes a day (2 days)</option>
+    </select>
+    <fieldset>
+      <legend>When</legend>
+      <label class="choice"><input type="radio" name="when" value="before" checked> In the days before the change</label>
+      <label class="choice"><input type="radio" name="when" value="after"> In the days after the change</label>
+    </fieldset>
+  </section>
+
+  <section id="out" aria-labelledby="h-plan">
+    <h2 id="h-plan">4. Your plan</h2>
+    <p id="summary" class="summary" aria-live="polite"></p>
+    <div id="days"></div>
+    <div class="row actions">
+      <button type="button" id="copy" class="secondary">Copy as text</button>
+      <button type="button" id="print" class="secondary">Print</button>
+    </div>
+    <p id="copied" class="hint" aria-live="polite"></p>
+  </section>
+
+  <p class="foot"><button type="button" id="clear" class="secondary">Start fresh</button></p>
+
+  <section class="about" aria-labelledby="h-about">
+    <h2 id="h-about">What this is, and what comes next</h2>
+    <p>Twice a year parents ask the same thing: shift a bit each day, or all at once? Guides answer with one
+      sample table for a 7 pm bedtime. This page builds the table from your own times.</p>
+    <p><strong>Already out there:</strong> printed charts from baby brands, and a time change helper inside one
+      sleep gadget's app. This page needs no gadget or app, takes every time in your day, and prints.</p>
+    <p><strong>Next, if people ask:</strong> two children on different routines, half before and half after,
+      a calendar file to import.</p>
+  </section>
+
+  <footer class="feedback">
+    <p>Did this help? <a href="https://github.com/guillearria/phoenix/issues/new?title=Daylight+saving+time+schedule%3A+feedback&body=What+did+you+try%2C+and+what+happened%3F%0A%0A">Tell us in one line</a>. It stays free.</p>
+    <p class="trust">Free. Nothing is sent or stored outside your browser.
+      <a href="https://github.com/guillearria/phoenix/tree/main/prototypes/daylight-saving-schedule">Source code</a> ·
+      a <a href="https://guillearria.github.io/phoenix/">Phoenix</a> prototype.</p>
+  </footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
