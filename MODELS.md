@@ -1,6 +1,6 @@
 # Models
 
-Prices checked 2026-10-22 against [OpenRouter's public list](https://openrouter.ai/api/v1/models), in US dollars per million tokens, input / output. The picks come from [Arena's leaderboards](https://arena.ai/leaderboard), read by hand because Arena blocks scripts; they live in [models.json](models.json).
+Prices checked 2026-10-23 against [OpenRouter's public list](https://openrouter.ai/api/v1/models), in US dollars per million tokens, input / output. The picks come from [Arena's leaderboards](https://arena.ai/leaderboard), read by hand because Arena blocks scripts; they live in [models.json](models.json).
 
 | Job | Pick | Model | Price today |
 |---|---|---|---|
