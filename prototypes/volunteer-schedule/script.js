@@ -53,14 +53,16 @@
   }
 
   // ---- saving ----
+  function state() {
+    return {
+      people: peopleBox.value, start: startBox.value, end: endBox.value,
+      days: chosenDays(), slots: slotsBox.value, avoid: avoidBox.checked,
+      away: away, seed: seed
+    };
+  }
   function save() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify({
-        people: peopleBox.value, start: startBox.value, end: endBox.value,
-        days: chosenDays(), slots: slotsBox.value, avoid: avoidBox.checked,
-        away: away, seed: seed
-      }));
-    } catch (e) { /* private mode: work without saving */ }
+    try { localStorage.setItem(KEY, JSON.stringify(state())); }
+    catch (e) { /* private mode: work without saving */ }
   }
   function load() {
     try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; }
@@ -308,8 +310,10 @@
     setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
     statusBox.textContent = "Saved volunteer-schedule.csv. It opens in Excel or any spreadsheet.";
   });
+  // No confirmation dialog (phones often block them): clear at once, offer Undo.
+  var undoState = null;
   el("clear").addEventListener("click", function () {
-    if (!window.confirm("Clear all names, days and away marks?")) return;
+    undoState = JSON.stringify(state());
     var today = new Date();
     var t0 = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
     startBox.value = iso(t0);
@@ -318,11 +322,18 @@
     slotsBox.value = 1;
     avoidBox.checked = true;
     seed = 1;
-    startFresh();
+    startFresh(false);
+    el("cleared").hidden = false;
   });
+  el("undo").addEventListener("click", function () {
+    if (!undoState) return;
+    try { localStorage.setItem(KEY, undoState); } catch (e) { /* cannot restore */ }
+    location.reload();
+  });
+  peopleBox.addEventListener("input", function () { el("cleared").hidden = true; });
 
   // Empties the page and saves the empty state, so a reload never brings the example back.
-  function startFresh() {
+  function startFresh(focus) {
     peopleBox.value = "";
     away = {};
     isExample = false;
@@ -333,9 +344,9 @@
     lastRota = null;
     drawAway();
     save();
-    peopleBox.focus();
+    if (focus) peopleBox.focus();
   }
-  el("fresh").addEventListener("click", startFresh);
+  el("fresh").addEventListener("click", function () { startFresh(true); });
   [peopleBox, startBox, endBox, slotsBox].forEach(function (x) {
     x.addEventListener("input", function () { if (isExample) { isExample = false; el("example-note").hidden = true; } });
   });

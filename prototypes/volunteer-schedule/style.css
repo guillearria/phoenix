@@ -63,7 +63,8 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, .scroll:focus
 .short td { background: #fff4e5; }
 .foot { text-align: center; }
 .example { background: #fff7e6; border: 1px solid #f0c36d; border-radius: 8px; padding: 0.6rem 0.8rem; }
-.example[hidden] { display: none; }
+.example[hidden], #cleared[hidden] { display: none; }
+#cleared { margin-left: 0.5rem; color: #4a4a4a; }
 .feedback { text-align: center; margin: 1.5rem 0 1rem; }
 .feedback p { margin: 0.3rem 0; }
 .trust { color: #4a4a4a; font-size: 0.95rem; }

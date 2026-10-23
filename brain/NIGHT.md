@@ -40,9 +40,9 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
 - Plain everyday American English. Use the words people would type into a search box:
   "schedule", "rotation", "split the bill", not niche or regional words.
 - index.html opens with the title, then one sentence starting "You get:" that names the result.
-- index.html ends with a short footer: "Did this help?" and a link that opens a new GitHub issue
-  on this repo with the prototype's name prefilled in the title. That link is the only way a
-  visitor can reach us; a plain link is fine, a form that sends data is not.
+- index.html ends with one footer line and one link that opens a new GitHub issue on this repo,
+  prefilled with the prototype's name: "Tell us what worked, or what you need next: <two or three
+  likely next features>." Then a trust line: free, nothing sent or stored, source code link.
 - Everything is free, with nothing to sell and no soliciting, ever.
 - The first screen already shows a filled-in example and its result, so a visitor understands the
   tool in five seconds. A clear "Start fresh" button empties it.
@@ -50,9 +50,10 @@ Everything goes in one new folder, prototypes/<short-name>/, named with everyday
   odd count, an empty field) and check the result matches what the page promises. A setting
   the page shows must do what it says.
 - Page text speaks only to the visitor. Comparisons with other tools, evidence and plans go in
-  README.md, never on the page. A visitor-facing invitation is fine, for example "Need X? Tell us."
+  README.md, never on the page. The footer line is the only invitation.
 - A clear or start-fresh button must leave the page empty, and it must stay empty after a reload.
-  Test it.
+  Never use browser pop-up dialogs (confirm, alert, prompt): phones often block them. Act at once
+  and offer Undo. Test it.
 - A clean, calm look: system fonts, generous spacing, one accent color, large tap targets, works
   on a phone and in dark mode, readable contrast, real labels on every input, works with a keyboard.
 - No requests to other sites, no forms that send anything, no tracking, no accounts. Data stays in
