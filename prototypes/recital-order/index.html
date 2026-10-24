@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Recital order maker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Recital order maker</h1>
+  <p class="lead">You get: a show order for your dance recital where every dancer has time to change between their numbers.</p>
+  <p class="example" id="example-note">This is a filled-in example: a 14-number recital where five dancers are in four numbers each.
+    The order it made is below.</p>
+  <p class="tools"><button type="button" id="fresh" class="secondary">Start fresh</button>
+    <span id="cleared" hidden>Cleared. <button type="button" id="undo" class="link">Undo</button></span></p>
+
+  <section aria-labelledby="h-list">
+    <h2 id="h-list">1. Your numbers and who is in them</h2>
+    <label for="list">One number per line: the name, a colon, then the dancers, separated by commas</label>
+    <textarea id="list" rows="12" spellcheck="false" placeholder="Junior Tap: Ava, Mia, Grace&#10;Teen Lyrical: Zoe, Lily, Emma"></textarea>
+    <p class="hint">Write each dancer's name the same way every time. Changing the list makes a new order.</p>
+  </section>
+
+  <section aria-labelledby="h-rules">
+    <h2 id="h-rules">2. How much time to change</h2>
+    <label for="gap">Other numbers between two of the same dancer's numbers, at least</label>
+    <input type="number" id="gap" min="1" max="10" value="2" inputmode="numeric">
+    <div class="check">
+      <input type="checkbox" id="pin-first" checked>
+      <label for="pin-first">Keep the first number on my list as the opener</label>
+    </div>
+    <div class="check">
+      <input type="checkbox" id="pin-last" checked>
+      <label for="pin-last">Keep the last number on my list as the finale</label>
+    </div>
+  </section>
+
+  <section class="order" aria-labelledby="h-order">
+    <h2 id="h-order">3. Your show order</h2>
+    <div class="buttons screen-only">
+      <button type="button" id="shuffle">Try another order</button>
+    </div>
+    <div id="summary" aria-live="polite"></div>
+    <ol id="result"></ol>
+    <div id="who"></div>
+    <div class="buttons screen-only" id="out-buttons" hidden>
+      <button type="button" id="print" class="secondary">Print</button>
+      <button type="button" id="copy" class="secondary">Copy as text</button>
+    </div>
+    <p id="status" class="hint" role="status"></p>
+  </section>
+
+  <footer class="feedback">
+    <p><a href="https://github.com/guillearria/phoenix/issues/new?title=Recital+order+maker%3A+feedback&body=What+worked%2C+and+what+do+you+need+next%3F%0A%0A">Tell us what worked, or what you need next</a></p>
+    <p class="trust">Free. Nothing is sent or stored outside your browser.
+      <a href="https://github.com/guillearria/phoenix/tree/main/prototypes/recital-order">Source code</a></p>
+  </footer>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
