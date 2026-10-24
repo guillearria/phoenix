@@ -1,13 +1,13 @@
 # State
 
-Updated 2026-10-23 13:34 UTC by the daily listen job. Every number comes from [the ledger](ledger/signals.csv). People means anyone except the owner and bots.
+Updated 2026-10-24 12:45 UTC by the daily listen job. Every number comes from [the ledger](ledger/signals.csv). People means anyone except the owner and bots.
 
 | Project | Stars | Watching | Forks | Open issues | Open pull requests | People activity, 7 days |
 |---|---:|---:|---:|---:|---:|---:|
 | [Global Observatory](https://github.com/guillearria/global-observatory) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [Vertical Agent Solutions](https://github.com/guillearria/vertical-agent-solutions) | 0 | 0 | 0 | 0 | 0 | 0 |
 | [Swing Lab](https://github.com/guillearria/swing-lab) | 0 | 0 | 0 | 0 | 0 | 0 |
-| [Phoenix](https://github.com/guillearria/phoenix) | 0 | 0 | 0 | 1 | 1 | 0 |
+| [Phoenix](https://github.com/guillearria/phoenix) | 0 | 0 | 0 | 1 | 2 | 0 |
 
 Stars, watching and forks are GitHub's public totals and can include the owner. Who starred, forked or watches needs a read token.
 
