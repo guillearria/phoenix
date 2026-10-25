@@ -1,6 +1,6 @@
 # Models
 
-Prices checked 2026-10-24 against [OpenRouter's public list](https://openrouter.ai/api/v1/models), in US dollars per million tokens, input / output. The picks come from [Arena's leaderboards](https://arena.ai/leaderboard), read by hand because Arena blocks scripts; they live in [models.json](models.json).
+Prices checked 2026-10-25 against [OpenRouter's public list](https://openrouter.ai/api/v1/models), in US dollars per million tokens, input / output. The picks come from [Arena's leaderboards](https://arena.ai/leaderboard), read by hand because Arena blocks scripts; they live in [models.json](models.json).
 
 | Job | Pick | Model | Price today |
 |---|---|---|---|
@@ -18,4 +18,4 @@ Prices checked 2026-10-24 against [OpenRouter's public list](https://openrouter.
 | Review a pull request another model wrote | Best | `openai/gpt-6.1-sol` | $2.00 / $10.00 (night batch $1.00 / $5.00) |
 |  | Fallback | `google/gemini-4-argon` | $2.00 / $10.00 (night batch $1.00 / $5.00) |
 
-469 models listed on OpenRouter today.
+467 models listed on OpenRouter today.
